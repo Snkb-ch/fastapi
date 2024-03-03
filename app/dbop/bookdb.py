@@ -31,6 +31,11 @@ def average_rating(db: Session, book_id: int):
     return total
 def get_book(db: Session, id: int, current_user: schemas.User = None):
     book = db.query(models.Book).filter(models.Book.id == id).first()
+
+    if not book:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Book with id {id} not found")
+
     book.average_rating = average_rating(db, book.id)
     # return 3 recent reviews
     reviews = db.query(models.Review).filter(models.Review.book_id == id).order_by(models.Review.id.desc()).limit(3).all()
@@ -106,7 +111,9 @@ def return_book(db: Session, book_id: int, user: schemas.User):
 
 
 def create_book(request, db):
-    new_book = models.Book(**request.dict())
+
+    new_book = models.Book(**request.model_dump())
+
     db.add(new_book)
     db.commit()
     db.refresh(new_book)
@@ -126,7 +133,7 @@ def update_book(db, book_id, request):
     db_book = db.query(models.Book).filter(models.Book.id == book_id).first()
     if not db_book:
         return None
-    for key, value in request.dict().items():
+    for key, value in request.model_dump().items():
         setattr(db_book, key, value)
     db.commit()
     db.refresh(db_book)

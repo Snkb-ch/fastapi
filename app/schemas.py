@@ -14,8 +14,8 @@ class User(UserBase):
     id: int
     is_admin: bool
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True
 
 class UserUpdate(UserBase):
     name :Optional[str]  = None
@@ -48,8 +48,8 @@ class Book(BookBase):
     favorite: Optional[bool] = None
 
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True
 
 class RentalBase(BaseModel):
     user_id: int
@@ -62,8 +62,8 @@ class RentalCreate(RentalBase):
 class Rental(RentalBase):
     id: int
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True
 
 class Token(BaseModel):
     access_token: str
@@ -74,8 +74,8 @@ class TokenData(BaseModel):
     user_id: Optional[int] = None
     is_admin: Optional[bool] = None
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True
 
 
 class ReviewBase(BaseModel):
@@ -92,16 +92,16 @@ class Review(ReviewBase):
     id: int
     username: str
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True
 
 
 class ReviewUpdate(ReviewBase):
     rating: Optional[float] = None
     comment: Optional[str] = None
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True
 
 
 class FavoriteBase(BaseModel):
@@ -114,8 +114,8 @@ class FavoriteCreate(FavoriteBase):
 class Favorite(FavoriteBase):
     id: int
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True
 
 
 class FavoriteDelete(FavoriteBase):
@@ -133,8 +133,8 @@ class NotificationRequest(BaseModel):
     book_id: int
     is_notified: Optional[bool] = False
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True
 class InternalMessageCreate(BaseModel):
     recipient_id: int
     message: str
@@ -145,5 +145,5 @@ class InternalMessage(BaseModel):
     message: str
     is_read: Optional[bool] = False
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True

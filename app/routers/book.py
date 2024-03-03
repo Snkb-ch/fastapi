@@ -23,24 +23,24 @@ async def read_books( current_user: Optional[schemas.User] = Depends(oauth2.get_
 # async def search_books(request: schemas.BookSearch, db: Session = Depends(get_db)):
 #     books = bookdb.search_books(db, title=request.title, author=request.author, year_of_publication=request.year_of_publication, category=request.category)
 #     return books
-@router.get('/search', response_model=List[schemas.Book])
+@router.get('/search', response_model=List[schemas.Book], status_code=status.HTTP_200_OK)
 async def search_books(title: Optional[str] = None, author: Optional[str] = None, year_of_publication: Optional[int] = None, category: Optional[str] = None, favorite : Optional[bool] = False, current_user: Optional[schemas.User] = Depends(oauth2.get_current_user), db: Session = Depends(get_db)):
     books = bookdb.search_books(db, title=title, author=author, year_of_publication=year_of_publication, category=category, favorite=favorite, current_user=current_user)
     return books
-@router.get('/{book_id}', response_model=schemas.Book)
+@router.get('/{book_id}', response_model=schemas.Book, status_code=status.HTTP_200_OK)
 async def read_book(book_id: int, db: Session = Depends(get_db), current_user: Optional[schemas.User] = Depends(oauth2.get_current_user)):
     db_book = bookdb.get_book(db, id=book_id, current_user=current_user)
     if db_book is None:
         raise HTTPException(status_code=404, detail="Book not found")
     return db_book
-@router.post('/rent/{book_id}', response_model=schemas.Book)
+@router.post('/rent/{book_id}', response_model=schemas.Book, status_code=status.HTTP_200_OK)
 async def rent_book(book_id: int, current_user: schemas.User = Depends(oauth2.get_current_user), db: Session = Depends(get_db)):
     db_book = bookdb.rent_book(db, book_id, current_user)
     if db_book is None:
         raise HTTPException(status_code=404, detail="Book not found")
     return db_book
 
-@router.post('/return/{book_id}', response_model=schemas.Book)
+@router.post('/return/{book_id}', response_model=schemas.Book, status_code=status.HTTP_200_OK)
 async def return_book(book_id: int, current_user: schemas.User = Depends(oauth2.get_current_user), db: Session = Depends(get_db)):
     db_book = bookdb.return_book(db, book_id, current_user)
     if db_book is None:
@@ -66,7 +66,7 @@ async def delete_book(book_id: int, db: Session = Depends(get_db), current_user:
         raise HTTPException(status_code=404, detail="Book not found")
     return db_book
 
-@router.put('/{book_id}', response_model=schemas.Book)
+@router.put('/{book_id}', response_model=schemas.Book, status_code=status.HTTP_200_OK)
 async def update_book(book_id: int, request: schemas.BookCreate, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
     if not current_user.is_admin:
         raise HTTPException(status_code=400, detail="You are not admin")
