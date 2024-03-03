@@ -28,11 +28,13 @@ class BookBase(BaseModel):
     year_of_publication: int
     category: str
 
+
 class BookSearch(BookBase):
     title: Optional[str] = None
     author: Optional[str] = None
     year_of_publication: Optional[int] = None
     category: Optional[str] = None
+    favorite : Optional[bool] = False
 
 
 class BookCreate(BookBase):
@@ -40,6 +42,10 @@ class BookCreate(BookBase):
 
 class Book(BookBase):
     id: int
+    average_rating: Optional[float] = None
+    available_copies: Optional[int] = None
+    topreviews: Optional[list] = None
+    favorite: Optional[bool] = None
 
 
     class Config:
@@ -67,6 +73,77 @@ class TokenData(BaseModel):
     email: Optional[str] = None
     user_id: Optional[int] = None
     is_admin: Optional[bool] = None
+
+    class Config:
+        orm_mode = True
+
+
+class ReviewBase(BaseModel):
+    rating: float
+    comment: Optional[str] = None
+
+
+
+class ReviewCreate(ReviewBase):
+
+    pass
+
+class Review(ReviewBase):
+    id: int
+    username: str
+
+    class Config:
+        orm_mode = True
+
+
+class ReviewUpdate(ReviewBase):
+    rating: Optional[float] = None
+    comment: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
+class FavoriteBase(BaseModel):
+    user_id: int
+    book_id: int
+
+class FavoriteCreate(FavoriteBase):
+    pass
+
+class Favorite(FavoriteBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class FavoriteDelete(FavoriteBase):
+    pass
+
+
+
+
+class NotificationRequestCreate(BaseModel):
+    pass
+
+class NotificationRequest(BaseModel):
+    id: int
+    user_id: int
+    book_id: int
+    is_notified: Optional[bool] = False
+
+    class Config:
+        orm_mode = True
+class InternalMessageCreate(BaseModel):
+    recipient_id: int
+    message: str
+
+class InternalMessage(BaseModel):
+    id: int
+    recipient_id: int
+    message: str
+    is_read: Optional[bool] = False
 
     class Config:
         orm_mode = True
