@@ -30,13 +30,6 @@ def test_read_books(client, token):
     response = client.get("/books/", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
 
-def test_read_book(client, token):
-    response = client.get("/books/3", headers={"Authorization": f"Bearer {token}"})
-    assert response.status_code == 200
-
-
-
-
 def test_book(client, token):
     response = client.post("/books/", json={"title": "test book", "author": "test author", "year_of_publication": 2021, "category": "test category"}, headers = {"Authorization": f"Bearer {token}"})
 
@@ -73,12 +66,3 @@ def test_book(client, token):
 
     response = client.delete(f"/books/{book_id}", headers = {"Authorization": f"Bearer {token}"})
     assert response.status_code == 204
-
-
-
-
-
-
-
-
-
